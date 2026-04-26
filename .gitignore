@@ -30,3 +30,11 @@ logs
 
 # Docker
 .dockerignore
+
+
+# personal history
+**/.frontend_git/
+**/.backend_git/
+
+#  submodules
+.gitmodules
