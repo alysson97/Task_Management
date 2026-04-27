@@ -15,8 +15,8 @@ O projeto está totalmente "dockerizado". Você só precisa do Docker instalado.
 
 1. **Clone o repositório:**
    ```bash
-   git clone <link-do-seu-repositorio>
-   cd <nome-da-pasta>
+   git clone https://github.com/alysson97/Task_Management.git
+   cd Task_Management
    ```
 
 2. **Suba os containers:**
