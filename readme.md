@@ -1,6 +1,6 @@
 # Desafio Manole - API de Tarefas
 
-**Monorepo** minimalista de gerenciamento de tarefas com Frontend (Next.js), Backend (NestJS) e Banco (PostgreSQL) em Docker.
+**Monorepo** minimalista de gerenciamento de tarefas com Frontend (Next.js), Backend (NestJS), Autenticação JWT e Banco (PostgreSQL) em Docker.
 
 ## 🏗️ Arquitetura
 
@@ -15,6 +15,7 @@
 └─────────────────────────────────────────┘
         ↓
     PostgreSQL 16
+    (User + Task models)
 ```
 
 ## 🚀 Tecnologias
@@ -22,7 +23,7 @@
 | Layer | Tech | Port |
 |-------|------|------|
 | **Frontend** | Next.js 16 + React 19 | 3000 (interno) |
-| **Backend** | NestJS 11 + Prisma 7 | 3000 (interno) |
+| **Backend** | NestJS 11 + Prisma 7 + JWT | 3000 (interno) |
 | **Database** | PostgreSQL 16 Alpine | 5432 (interno) |
 | **Proxy** | Nginx Alpine | 80 (público) |
 
@@ -36,10 +37,16 @@ docker-compose up -d
 
 Aguarde ~30s para inicialização completa.
 
+### Executar migrations do banco
+
+```bash
+docker-compose exec api npm run prisma:migrate
+```
+
 ### Acessar
 
-- **Frontend**: http://localhost/
-- **Backend API**: http://localhost/api/tasks
+- **Frontend**: http://localhost/ (com login)
+- **Backend API**: http://localhost/api/* (requer JWT)
 - **Banco**: `psql -h localhost -U postgres`
 
 ### Parar
@@ -47,6 +54,39 @@ Aguarde ~30s para inicialização completa.
 ```bash
 docker-compose down
 ```
+
+## 🔐 Autenticação JWT
+
+### Registro de novo usuário
+
+Acesse http://localhost/, clique em "Register" e preencha:
+- **Name**: Seu nome completo
+- **Username**: Nome de usuário (único)
+- **Password**: Senha
+
+O frontend automaticamente:
+1. Envia dados para `POST /api/auth/register`
+2. Recebe JWT token
+3. Armazena em localStorage
+4. Redireciona para home
+
+### Login
+
+Clique em "Login" e preencha:
+- **Username**: Nome de usuário
+- **Password**: Senha
+
+O frontend automáticamente:
+1. Envia dados para `POST /api/auth/login`
+2. Recebe JWT token
+3. Armazena em localStorage
+4. Redireciona para home com tarefas do usuário
+
+### Logout
+
+Clique no botão "Logout" que:
+1. Remove token from localStorage
+2. Redireciona para `/login`
 
 ## 🔧 Desenvolvimento Local
 
@@ -56,19 +96,28 @@ docker-compose down
 cd backend
 npm install
 cp .env.example .env
-npm run prisma:migrate
-npm run start:dev
+npm run prisma:generate    # Gerar cliente Prisma
+npm run prisma:migrate     # Criar/aplicar migrations
+npm run start:dev          # Modo desenvolvimento
 ```
 
-Backend roda em `http://localhost:3000`
+Backend roda em `http://localhost:3000` (local)
+
+Com variáveis de ambiente:
+```
+DATABASE_URL=postgresql://...
+JWT_SECRET=seu-secret-aqui
+JWT_EXPIRATION=24h
+CORS_ORIGIN=http://localhost
+```
 
 ### Frontend
 
 ```bash
 cd frontend
 npm install
-# .env.local aponta para http://localhost:3000
-npm run dev
+# .env.local aponta para http://localhost:3000 em dev
+npm run dev                # Modo desenvolvimento
 ```
 
 Frontend roda em `http://localhost:3000` (local)

@@ -10,6 +10,15 @@ const api = axios.create({
   },
 });
 
+// Add JWT token to requests
+api.interceptors.request.use((config) => {
+  const token = typeof window !== 'undefined' ? localStorage.getItem('token') : null;
+  if (token) {
+    config.headers.Authorization = `Bearer ${token}`;
+  }
+  return config;
+});
+
 export const taskService = {
   async getTasks(): Promise<Task[]> {
     const response = await api.get<Task[]>('/tasks');
@@ -33,5 +42,43 @@ export const taskService = {
 
   async deleteTask(id: string): Promise<void> {
     await api.delete(`/tasks/${id}`);
+  },
+};
+
+export const authService = {
+  async register(name: string, username: string, password: string) {
+    const response = await axios.post(`${API_URL}/auth/register`, {
+      name,
+      username,
+      password,
+    });
+    return response.data;
+  },
+
+  async login(username: string, password: string) {
+    const response = await axios.post(`${API_URL}/auth/login`, {
+      username,
+      password,
+    });
+    return response.data;
+  },
+
+  logout() {
+    if (typeof window !== 'undefined') {
+      localStorage.removeItem('token');
+    }
+  },
+
+  getToken() {
+    if (typeof window !== 'undefined') {
+      return localStorage.getItem('token');
+    }
+    return null;
+  },
+
+  setToken(token: string) {
+    if (typeof window !== 'undefined') {
+      localStorage.setItem('token', token);
+    }
   },
 };
