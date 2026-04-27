@@ -62,26 +62,26 @@ export default function Home() {
           <div className="grid grid-cols-3 gap-4 mb-6">
             <div className="bg-white p-4 rounded-lg shadow text-center">
               <p className="text-2xl font-bold text-gray-900">{tasks.length}</p>
-              <p className="text-sm text-gray-600">Total</p>
+              <p className="text-sm ">Total</p>
             </div>
             <div className="bg-white p-4 rounded-lg shadow text-center">
               <p className="text-2xl font-bold text-gray-900">
                 {tasks.filter((t) => t.status === 'pending').length}
               </p>
-              <p className="text-sm text-gray-600">Pendentes</p>
+              <p className="text-sm ">Pendentes</p>
             </div>
             <div className="bg-white p-4 rounded-lg shadow text-center">
               <p className="text-2xl font-bold text-green-600">
                 {tasks.filter((t) => t.status === 'completed').length}
               </p>
-              <p className="text-sm text-gray-600">Concluídas</p>
+              <p className="text-sm ">Concluídas</p>
             </div>
           </div>
         )}
 
         {/* Task List */}
         <div>
-          <h2 className="text-xl font-bold text-gray-900 mb-4">Tarefas</h2>
+          <h2 className="text-xl font-bold mb-4">Tarefas</h2>
           {loading ? (
             <div className="bg-white p-8 rounded-lg shadow text-center">
               <p className="text-gray-500">Carregando tarefas...</p>
