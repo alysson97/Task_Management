@@ -1,5 +1,5 @@
 import { Injectable, NotFoundException, ForbiddenException } from '@nestjs/common';
-import { PrismaService } from 'src/prisma.service';
+import { PrismaService } from '../prisma.service';
 import { CreateTaskDto } from './dto/create-task.dto';
 import { UpdateTaskDto } from './dto/update-task.dto';
 import { Task } from '@prisma/client';
@@ -49,10 +49,10 @@ export class TasksService {
     });
   }
 
-  async remove(id: string, userId: string): Promise<Task> {
+  async remove(id: string, userId: string): Promise<void> {
     await this.findOne(id, userId);
 
-    return this.prisma.task.delete({
+    await this.prisma.task.delete({
       where: { id },
     });
   }

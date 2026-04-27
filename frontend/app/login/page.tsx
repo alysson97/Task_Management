@@ -50,72 +50,69 @@ export default function LoginPage() {
 
   return (
     <div className="min-h-screen flex items-center justify-center px-4">
-  <div className="w-full max-w-md">
+      <div className="w-full max-w-md">
+        {/* CARD */}
+        <div className="bg-white border border-gray-200 rounded-2xl shadow-lg p-8">
+          <h1 className="text-2xl font-semibold text-center mb-6">
+            {isLogin ? 'Entrar' : 'Criar conta'}
+          </h1>
 
-    {/* CARD */}
-    <div className="bg-white border border-gray-200 rounded-2xl shadow-lg p-8">
+          {error && (
+            <div className="bg-red-50 border border-red-200 text-red-600 px-4 py-3 rounded-lg mb-4">
+              {error}
+            </div>
+          )}
 
-      <h1 className="text-2xl font-semibold text-center mb-6">
-        {isLogin ? 'Entrar' : 'Criar conta'}
-      </h1>
+          <form onSubmit={handleSubmit} className="space-y-4">
+            {!isLogin && (
+              <input
+                type="text"
+                name="name"
+                value={formData.name}
+                onChange={handleChange}
+                placeholder="Seu nome"
+                className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:border-gray-900"
+              />
+            )}
 
-      {error && (
-        <div className="bg-red-50 border border-red-200 text-red-600 px-4 py-3 rounded-lg mb-4">
-          {error}
+            <input
+              type="text"
+              name="username"
+              value={formData.username}
+              onChange={handleChange}
+              placeholder="Usuário"
+              className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:border-gray-900"
+            />
+
+            <input
+              type="password"
+              name="password"
+              value={formData.password}
+              onChange={handleChange}
+              placeholder="Senha"
+              className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:border-gray-900"
+            />
+
+            <button
+              type="submit"
+              disabled={loading}
+              className="w-full bg-gray-900 text-white py-2.5 rounded-xl font-medium hover:bg-gray-700 transition"
+            >
+              {loading ? 'Carregando...' : isLogin ? 'Entrar' : 'Criar conta'}
+            </button>
+          </form>
+
+          <p className="text-center text-sm text-gray-500 mt-6">
+            {isLogin ? 'Não tem conta?' : 'Já possui conta?'}{' '}
+            <button
+              onClick={() => setIsLogin(!isLogin)}
+              className="text-gray-900 font-medium hover:underline"
+            >
+              {isLogin ? 'Criar conta' : 'Entrar'}
+            </button>
+          </p>
         </div>
-      )}
-
-      <form onSubmit={handleSubmit} className="space-y-4">
-
-        {!isLogin && (
-          <input
-            type="text"
-            name="name"
-            value={formData.name}
-            onChange={handleChange}
-            placeholder="Seu nome"
-            className="input"
-          />
-        )}
-
-        <input
-          type="text"
-          name="username"
-          value={formData.username}
-          onChange={handleChange}
-          placeholder="Usuário"
-          className="input"
-        />
-
-        <input
-          type="password"
-          name="password"
-          value={formData.password}
-          onChange={handleChange}
-          placeholder="Senha"
-          className="input"
-        />
-
-        <button
-          type="submit"
-          disabled={loading}
-          className="w-full bg-gray-900 text-white py-2.5 rounded-xl font-medium hover:bg-gray-700 transition"
-        >
-          {loading ? 'Carregando...' : isLogin ? 'Entrar' : 'Criar conta'}
-        </button>
-      </form>
-
-      <p className="text-center text-sm text-gray-500 mt-6">
-        {isLogin ? 'Não tem conta?' : 'Já possui conta?'}{' '}
-        <button
-          onClick={() => setIsLogin(!isLogin)}
-          className="text-gray-900 font-medium hover:underline"
-        >
-          {isLogin ? 'Criar conta' : 'Entrar'}
-        </button>
-      </p>
+      </div>
     </div>
-  </div>
-</div>
   );
 }
